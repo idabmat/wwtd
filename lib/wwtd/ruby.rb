@@ -18,6 +18,8 @@ module WWTD
         elsif chruby_executable
           command = "chruby-exec #{version} -- "
           command if cache_command("#{command} ruby -v")
+        elsif asdf_executable
+          "ASDF_RUBY_VERSION=#{version} "
         elsif options[:rerun]
           if rbenv_executable
             # cannot call different ruby from inside ruby, but ok for copy-paste
@@ -60,6 +62,10 @@ module WWTD
 
       def chruby_executable
         !ENV["PATH"].include?("/rbenv/") && cache_command("which chruby-exec")
+      end
+
+      def asdf_executable
+        cache_command("which asdf")
       end
 
       def cache_command(command)
